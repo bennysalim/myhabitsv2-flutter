@@ -1,16 +1,25 @@
-# myhabitsv2
+# What is My Habits 2.0?
 
-A new Flutter project.
+My habits 2.0 app is inspired from first myhabits 1.0 by android native mobile development project from [this repository](https://github.com/bennysalim/CStudio_IF570_D_UAS_MyHabits). The purpose of this project is to convert FE framework by using Flutter for Android & iOS (clone the project and build the .ipa file), feature and also user interface (UI/UX) improvement.
 
-## Getting Started
+**From this**
 
-This project is a starting point for a Flutter application.
+![myhabits1](../myhabitsv2/screenshots/Screenshot_20221027-211834_Myhabits.jpg)
 
-A few resources to get you started if this is your first Flutter project:
+**To this**
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+![myhabits1](../myhabitsv2/screenshots/Screenshot_20221027-212140.jpg)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+**Disclaimer, this project has not already done yet, wait until APK is officialy released from this repo.**
+
+## Getting Started : I want to try this project locally
+
+Before you start using this project, you have to  download Flutter SDK from [Flutter Official Website Here](flutter.dev) also Android/iOS SDK included in your machine.
+
+After above, you can use this Flutter project to build new .apk/.ipa file by cloning the project
+
+```git clone https://github.com/bennysalim/myhabitsv2-flutter```
+
+Next you have to get the dependencies because this repository project doesn't already include the package by go to the terminal, change directory to ```cd myhabitsv2-flutter```, and get the dependencies using Flutter CLI ```flutter pub get```.
+
+Next you can run the app from lib/main.dart from your VSCode/IntellIJ IDEA using smartphones/emulator.
