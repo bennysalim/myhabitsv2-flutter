@@ -4,11 +4,11 @@ My habits 2.0 app is inspired from first myhabits 1.0 by android native mobile d
 
 **From this**
 
-![myhabits1](../myhabitsv2/screenshots/Screenshot_20221027-211834_Myhabits.jpg)
+![myhabits1](screenshots/Screenshot_20221027-211834_Myhabits.jpg)
 
 **To this**
 
-![myhabits1](../myhabitsv2/screenshots/Screenshot_20221027-212140.jpg)
+![myhabits1](screenshots/Screenshot_20221027-212140.jpg)
 
 **Disclaimer, this project has not already done yet, wait until APK is officialy released from this repo.**
 
