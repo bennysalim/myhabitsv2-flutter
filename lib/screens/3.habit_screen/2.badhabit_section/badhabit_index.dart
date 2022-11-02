@@ -1,13 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myhabitsv2/models/badhabit_model.dart';
+import 'package:myhabitsv2/screens/3.habit_screen/2.badhabit_section/badhabit_body/emptybadhabit_screen.dart';
+import 'package:myhabitsv2/viewmodels/badhabit_provider.dart';
+import 'package:provider/provider.dart';
 import 'entrybadhabit_screen/entrybadhabit_screen.dart';
 import 'badhabit_body/mainbadhabit_screen.dart';
 
-class BadHabitIndex extends StatelessWidget {
+class BadHabitIndex extends StatefulWidget {
   const BadHabitIndex({super.key});
 
   @override
+  State<BadHabitIndex> createState() => _BadHabitIndexState();
+}
+
+class _BadHabitIndexState extends State<BadHabitIndex> {
+  @override
+  void didChangeDependencies() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<BadHabitProvider>(context, listen: false)
+          .getAllBadHabitData();
+    });
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final badHabit = Provider.of<BadHabitProvider>(context).badHabit;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -38,7 +57,9 @@ class BadHabitIndex extends StatelessWidget {
           )
         ],
       ),
-      body: MainBadHabitScreen(),
+      body: badHabit.isNotEmpty
+          ? const MainBadHabitScreen()
+          : const EmptyBadHabitScreen(),
     );
   }
 }

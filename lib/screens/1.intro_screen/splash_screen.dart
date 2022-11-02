@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
-
 import 'package:myhabitsv2/screens/1.intro_screen/onboarding_screen.dart';
+import 'package:myhabitsv2/screens/3.habit_screen/bottom_navigation.dart';
+import 'package:myhabitsv2/viewmodels/usersharedpreference_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   static const routeName = "/";
@@ -13,10 +16,41 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  //implementasikan sharedpreference
+  // //pembuatan variabel provider untuk mengambil data dari sharedpreferences
+  // late SharedPreferences sharedPreferences =
+  //     Provider.of<UserSharedPreferenceProvider>(context, listen: false).prefs;
+  // late bool? isNeedLogin;
+
   @override
   void initState() {
-    super.initState();
+    //MENGGUNAKAN SHAREDPREFERENCES
+    // Provider.of<UserSharedPreferenceProvider>(context, listen: false)
+    // .getSharedPreferenceInstance();
+    // isNeedLogin = sharedPreferences.getBool("isNeedLogin");
+    // print("isNeedLogin: ${isNeedLogin.toString()}");
+    // if (isNeedLogin == true) {
+    //   Timer(
+    //     const Duration(seconds: 2),
+    //     () => Navigator.pushReplacement(
+    //       context,
+    //       MaterialPageRoute(
+    //         builder: (context) => const OnboardingScreen(),
+    //       ),
+    //     ),
+    //   );
+    // } else {
+    //   Timer(
+    //     const Duration(seconds: 2),
+    //     () => Navigator.pushReplacement(
+    //       context,
+    //       MaterialPageRoute(
+    //         builder: (context) => const MyHabitsBottomNavigation(),
+    //       ),
+    //     ),
+    //   );
+    // }
+
+    //TANPA MENGGUNAKAN SHAREDPREFERENCES
     Timer(
       const Duration(seconds: 2),
       () => Navigator.pushReplacement(
@@ -26,6 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
     );
+    super.initState();
   }
 
   @override

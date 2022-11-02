@@ -1,10 +1,38 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myhabitsv2/screens/2.auth_screen/auth_index.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../viewmodels/usersharedpreference_provider.dart';
 import 'myhabitsinfo_screen.dart';
 
-class SettingsIndex extends StatelessWidget {
+class SettingsIndex extends StatefulWidget {
   const SettingsIndex({super.key});
+
+  @override
+  State<SettingsIndex> createState() => _SettingsIndexState();
+}
+
+class _SettingsIndexState extends State<SettingsIndex> {
+  var _email = "Email: ";
+  var _nama = "";
+  //pembuatan variabel provider untuk mengambil data dari sharedpreferences
+  late SharedPreferences sharedPreferences =
+      Provider.of<UserSharedPreferenceProvider>(context, listen: false).prefs;
+  @override
+  void initState() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null) {
+        setState(() {
+          _email = "Email: ${user.email}";
+        });
+      }
+    });
+    Provider.of<UserSharedPreferenceProvider>(context, listen: false)
+        .getSharedPreferenceInstance();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +66,7 @@ class SettingsIndex extends StatelessWidget {
                     color: Colors.black,
                   ),
                   Text(
-                    "Benny Septiawan Salim",
+                    _nama,
                     style: GoogleFonts.quicksand(
                         color: const Color.fromRGBO(53, 84, 56, 1),
                         fontWeight: FontWeight.bold,
@@ -48,7 +76,7 @@ class SettingsIndex extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    "benny.septiawan@student.umn.ac.id",
+                    _email,
                     style: GoogleFonts.quicksand(
                         color: const Color.fromRGBO(53, 84, 56, 1),
                         fontWeight: FontWeight.bold,
@@ -58,9 +86,12 @@ class SettingsIndex extends StatelessWidget {
                     height: 10,
                   ),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      await FirebaseAuth.instance.signOut();
                       Navigator.of(context)
                           .pushReplacementNamed(AuthIndex.routeName);
+                      sharedPreferences.remove("username");
+                      sharedPreferences.setBool("isNeedLogin", true);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromRGBO(53, 84, 56, 1),

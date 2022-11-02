@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myhabitsv2/models/badhabit_model.dart';
+import 'package:myhabitsv2/viewmodels/badhabit_provider.dart';
+import 'package:nanoid/nanoid.dart';
+import 'package:provider/provider.dart';
 
 class EntryBadHabitScreen extends StatefulWidget {
   const EntryBadHabitScreen({super.key});
@@ -9,6 +13,18 @@ class EntryBadHabitScreen extends StatefulWidget {
 }
 
 class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
+  var formKey = GlobalKey<FormState>();
+
+  TextEditingController _ctrlnamaHabitBuruk = TextEditingController();
+  TextEditingController _ctrlceritaHabitBuruk = TextEditingController();
+  TextEditingController _ctrlmotivasiHabitBuruk = TextEditingController();
+  TextEditingController _ctrlalternatifKegiatan = TextEditingController();
+
+  String namaHabitBuruk = "",
+      ceritaHabitBuruk = "",
+      motivasiHabitBuruk = "",
+      alternatifKegiatan = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,6 +41,7 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
             child: Container(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
               child: Form(
+                key: formKey,
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -56,6 +73,17 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
                             color: const Color.fromRGBO(53, 84, 56, 1),
                           ),
                         ),
+                        validator: (value) {
+                          if (value.toString().isEmpty) {
+                            return "mohon tuliskan habit buruknya";
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            namaHabitBuruk = value;
+                          });
+                        },
                       ),
                       const SizedBox(
                         height: 20,
@@ -75,6 +103,17 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
                             color: const Color.fromRGBO(53, 84, 56, 1),
                           ),
                         ),
+                        validator: (value) {
+                          if (value.toString().isEmpty) {
+                            return "ceritakan secara singkat";
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            ceritaHabitBuruk = value;
+                          });
+                        },
                       ),
                       const SizedBox(
                         height: 20,
@@ -89,11 +128,22 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
                       ),
                       TextFormField(
                         decoration: InputDecoration(
-                          hintText: "karena saya...",
+                          hintText: "tuliskan motivasi kamu..",
                           hintStyle: GoogleFonts.quicksand(
                             color: const Color.fromRGBO(53, 84, 56, 1),
                           ),
                         ),
+                        validator: (value) {
+                          if (value.toString().isEmpty) {
+                            return "ceritakan motivasi stop habit ini";
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            motivasiHabitBuruk = value;
+                          });
+                        },
                       ),
                       const SizedBox(
                         height: 20,
@@ -113,6 +163,17 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
                             color: const Color.fromRGBO(53, 84, 56, 1),
                           ),
                         ),
+                        validator: (value) {
+                          if (value.toString().isEmpty) {
+                            return "ceritakan alteratif kegiatan";
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            alternatifKegiatan = value;
+                          });
+                        },
                       ),
                       const SizedBox(
                         height: 220,
@@ -125,7 +186,21 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.of(context).pop();
+                                if (formKey.currentState!.validate()) {
+                                  formKey.currentState!.save();
+                                  final badHabit = BadHabitModel(
+                                      id: nanoid(10),
+                                      namaHabitBuruk: namaHabitBuruk,
+                                      ceritaHabitBuruk: ceritaHabitBuruk,
+                                      motivasiHabitBuruk: motivasiHabitBuruk,
+                                      alternatifKegiatan: alternatifKegiatan,
+                                      completed: 0,
+                                      relapse: 0);
+                                  Provider.of<BadHabitProvider>(context,
+                                          listen: false)
+                                      .add(badHabit);
+                                  Navigator.of(context).pop();
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:

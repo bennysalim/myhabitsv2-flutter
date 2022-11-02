@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,11 +12,16 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _ctrlEmail = TextEditingController();
+  final _ctrlPassword = TextEditingController();
+  String _email = "", _password = "";
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
       child: Form(
+        key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -42,12 +48,24 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
             TextFormField(
               keyboardType: TextInputType.emailAddress,
+              controller: _ctrlEmail,
               decoration: InputDecoration(
                 hintText: "Email",
                 hintStyle: GoogleFonts.quicksand(
                   color: const Color.fromRGBO(53, 84, 56, 1),
                 ),
               ),
+              onChanged: (value) {
+                setState(() {
+                  _email = value.toString();
+                });
+              },
+              validator: (value) {
+                if (_email.isEmpty) {
+                  return "Mohon diisi email yang valid!";
+                }
+                return null;
+              },
             ),
             const SizedBox(
               height: 20,
@@ -61,13 +79,28 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
             ),
             TextFormField(
-              obscureText: true,
+              keyboardType: TextInputType.visiblePassword,
+              controller: _ctrlPassword,
               decoration: InputDecoration(
                 hintText: "Password",
                 hintStyle: GoogleFonts.quicksand(
                   color: const Color.fromRGBO(53, 84, 56, 1),
                 ),
               ),
+              onChanged: (value) {
+                setState(() {
+                  _password = value.toString();
+                });
+              },
+              validator: (value) {
+                if (_password.isNotEmpty && _password.length < 6) {
+                  return "Password minimal 6 huruf";
+                } else if (_password.isEmpty) {
+                  return "Mohon diisi password yang valid!";
+                }
+                return null;
+              },
+              obscureText: true,
             ),
             const SizedBox(
               height: 30,
@@ -79,9 +112,33 @@ class _SignInScreenState extends State<SignInScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context)
-                          .pushNamed(MyHabitsBottomNavigation.routeName);
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        try {
+                          UserCredential credential = await FirebaseAuth
+                              .instance
+                              .signInWithEmailAndPassword(
+                                  email: _email, password: _password);
+                          Navigator.of(context)
+                              .pushNamed(MyHabitsBottomNavigation.routeName);
+                        } on FirebaseAuthException catch (e) {
+                          if (e.code == 'user-not-found') {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      'Mohon maaf, user ini belum ditemukan, silahkan sign up terlebih dahulu')),
+                            );
+                          } else if (e.code == 'wrong-password') {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content:
+                                    Text('Mohon maaf, password kamu salah'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
+                        }
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromRGBO(53, 84, 56, 1),
