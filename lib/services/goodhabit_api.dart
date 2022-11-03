@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:myhabitsv2/models/goodhabit_model.dart';
 import 'dart:convert';
 
@@ -29,15 +30,20 @@ class GoodHabitAPI {
     final response = await _dio.get("$_baseURL/$_userUID/goodhabits.json");
     // response.data merupakan _internallinkedhashmap<String, dynamic>
     //TYPE
-    List<Map<String, dynamic>> goodHabit = [];
+    List<GoodHabitModel> goodHabit = [];
 
     if (response.data != null) {
       response.data.forEach((key, value) {
         print("keymap: $key:$value");
-        goodHabit.add(value);
+        goodHabit.add(GoodHabitModel(
+            id: key.toString(),
+            namaHabit: value["namaHabit"].toString(),
+            motivasiHabit: value["motivasiHabit"].toString(),
+            rutinitasWaktu: value["rutinitasWaktu"].toList(),
+            totalCompleted: value["totalCompleted"],
+            totalSkipped: value["totalSkipped"]));
       });
-      return List<GoodHabitModel>.from(
-          goodHabit.map((habit) => GoodHabitModel.fromJSON(habit)).toList());
+      return goodHabit;
     }
     return [];
   }
@@ -49,12 +55,6 @@ class GoodHabitAPI {
       "$_baseURL/$_userUID/goodhabits.json",
       data: goodHabit.toJSON(),
     );
-    if (response.data > 0) {
-      response.data.forEach((key, value) {
-        final goodHabitID = value["id"];
-        goodHabit.id = goodHabitID;
-      });
-    }
     return goodHabit;
   }
 
@@ -69,21 +69,16 @@ class GoodHabitAPI {
     });
 
     final response = await _dio.put(
-        "$_baseURL/$_userUID/goodhabits/$keys/${goodHabit.id}.json",
+        "$_baseURL/$_userUID/goodhabits/${goodHabit.id}.json",
         data: goodHabit.toJSON());
-    if (response.data > 0) {
-      return true;
-    }
-    return false;
+    return true;
   }
 
   Future<bool> deleteHabitToAPI(String id) async {
     // getUserID();
 
-    final response = await _dio.delete("$_baseURL/$_userUID/goodhabits/$id");
-    if (response.data['goodhabits']['affectedRows'] > 0) {
-      return true;
-    }
-    return false;
+    final response =
+        await _dio.delete("$_baseURL/$_userUID/goodhabits/$id.json");
+    return true;
   }
 }

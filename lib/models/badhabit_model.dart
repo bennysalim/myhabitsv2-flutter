@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class BadHabitModel {
-  String id,
-      namaHabitBuruk,
+  String? id;
+  String namaHabitBuruk,
       ceritaHabitBuruk,
       motivasiHabitBuruk,
       alternatifKegiatan;
   int completed;
   int relapse;
   BadHabitModel(
-      {required this.id,
+      {this.id,
       required this.namaHabitBuruk,
       required this.ceritaHabitBuruk,
       required this.motivasiHabitBuruk,
@@ -28,7 +28,6 @@ class BadHabitModel {
       );
 
   Map<String, dynamic> toJSON() => {
-        "id": id,
         "namaHabitBuruk": namaHabitBuruk,
         "ceritaHabitBuruk": ceritaHabitBuruk,
         "motivasiHabitBuruk": motivasiHabitBuruk,

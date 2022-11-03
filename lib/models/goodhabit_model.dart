@@ -1,18 +1,18 @@
 class GoodHabitModel {
-  String id;
+  String? id;
   String namaHabit, motivasiHabit;
   List<dynamic>? rutinitasWaktu = [{}];
-  int totalCompleted;
-  int totalSkipped;
+  int? totalCompleted;
+  int? totalSkipped;
 
   //data yang akan diinput nantinya akan ditampung ke dalam 1 object constructor
   GoodHabitModel({
-    required this.id,
+    this.id,
     required this.namaHabit,
     required this.motivasiHabit,
     required this.rutinitasWaktu,
-    required this.totalCompleted,
-    required this.totalSkipped,
+    this.totalCompleted,
+    this.totalSkipped,
   });
 
   factory GoodHabitModel.fromJSON(Map<String, dynamic> json) => GoodHabitModel(
@@ -25,7 +25,6 @@ class GoodHabitModel {
       );
 
   Map<String, dynamic> toJSON() => {
-        "id": id,
         "namaHabit": namaHabit,
         "motivasiHabit": motivasiHabit,
         "rutinitasWaktu": rutinitasWaktu,

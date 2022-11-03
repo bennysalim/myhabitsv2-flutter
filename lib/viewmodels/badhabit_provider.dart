@@ -29,4 +29,15 @@ class BadHabitProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void delete(String id) async {
+    final targetIndex = _badHabit.indexWhere((element) => element.id == id);
+    if (targetIndex != -1) {
+      final isSuccess = await _service.deleteHabitToAPI(id);
+      if (isSuccess) {
+        _badHabit.removeAt(targetIndex);
+        notifyListeners();
+      }
+    }
+  }
 }

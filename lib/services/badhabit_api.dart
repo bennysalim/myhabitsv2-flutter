@@ -29,16 +29,21 @@ class BadHabitAPI {
     final response = await _dio.get("$_baseURL/$_userUID/badhabits.json");
     // response.data merupakan _internallinkedhashmap<String, dynamic>
     //TYPE
-    List<Map<String, dynamic>> badHabit = [];
+    List<BadHabitModel> badHabit = [];
 
     if (response.data != null) {
       response.data.forEach((key, value) {
         print("badhabit: $key:$value");
-        badHabit.add(value);
+        badHabit.add(BadHabitModel(
+            id: key.toString(),
+            namaHabitBuruk: value["namaHabitBuruk"],
+            ceritaHabitBuruk: value["ceritaHabitBuruk"],
+            motivasiHabitBuruk: value["motivasiHabitBuruk"],
+            alternatifKegiatan: value["alternatifKegiatan"],
+            completed: value["completed"],
+            relapse: value["relapse"]));
       });
-      return List<BadHabitModel>.from(badHabit
-          .map((badhabit) => BadHabitModel.fromJSON(badhabit))
-          .toList());
+      return badHabit;
     }
     return [];
   }
@@ -51,5 +56,17 @@ class BadHabitAPI {
       data: badHabit.toJSON(),
     );
     return badHabit;
+  }
+
+  //3. delete bad habit data
+  Future<bool> deleteHabitToAPI(String id) async {
+    // getUserID();
+
+    final response =
+        await _dio.delete("$_baseURL/$_userUID/badhabits/$id.json");
+    if (response.data['badhabits']['affectedRows'] > 0) {
+      return true;
+    }
+    return false;
   }
 }

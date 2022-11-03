@@ -189,7 +189,6 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
                                 if (formKey.currentState!.validate()) {
                                   formKey.currentState!.save();
                                   final badHabit = BadHabitModel(
-                                      id: nanoid(10),
                                       namaHabitBuruk: namaHabitBuruk,
                                       ceritaHabitBuruk: ceritaHabitBuruk,
                                       motivasiHabitBuruk: motivasiHabitBuruk,

@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../models/badhabit_model.dart';
@@ -13,6 +16,20 @@ class MainBadHabitScreen extends StatefulWidget {
 }
 
 class _MainBadHabitScreenState extends State<MainBadHabitScreen> {
+  // String? _dateTime;
+
+  @override
+  void initState() {
+    // Timer.periodic(
+    //     const Duration(seconds: 1),
+    //     (_) => setState(() {
+    //           _dateTime = DateFormat("HH:MM:ss").format(DateTime(0));
+    //           print("Datetime: ${_dateTime.toString()}");
+    //         }));
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final badHabit = Provider.of<BadHabitProvider>(context).badHabit;
@@ -60,7 +77,33 @@ class _MainBadHabitScreenState extends State<MainBadHabitScreen> {
                           ),
                         ),
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text("Penghapusan Bad Habit"),
+                                    content: Text(
+                                        "Apakah Anda yakin ingin menghapus habit dengan judul : ${badHabit[index].namaHabitBuruk.toString()}\nIngat motivasi Anda : ${badHabit[index].motivasiHabitBuruk.toString()}\nAlternatif Kegiatan: ${badHabit[index].alternatifKegiatan.toString()}"),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Provider.of<BadHabitProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .delete(badHabit[index].id!);
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text("HAPUS")),
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text("BATAL"))
+                                    ],
+                                  );
+                                });
+                          },
                           child: Container(
                             padding: const EdgeInsets.all(5),
                             child: const Icon(
@@ -91,7 +134,7 @@ class _MainBadHabitScreenState extends State<MainBadHabitScreen> {
                           ),
                         ),
                         Text(
-                          "0s",
+                          "00:00:00 s",
                           textAlign: TextAlign.start,
                           style: GoogleFonts.quicksand(
                             fontWeight: FontWeight.bold,

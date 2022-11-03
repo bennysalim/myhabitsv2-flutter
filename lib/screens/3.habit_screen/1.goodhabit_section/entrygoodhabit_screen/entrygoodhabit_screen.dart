@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import '../../bottom_navigation.dart';
 
 class EntryGoodHabitScreen extends StatefulWidget {
+  static const routeName =
+      "./onboarding/authindex/bottomnav/goodhabit/entrygoodhabit";
   const EntryGoodHabitScreen({super.key});
 
   @override
@@ -43,55 +45,48 @@ class _EntryGoodHabitScreenState extends State<EntryGoodHabitScreen> {
   String _jamSabtu = "00:00";
   String _jamMinggu = "00:00";
 
-  //rutinitasWaktu
-  List _rutinitasWaktu = [
-    {"hari": "Senin", "status": false, "jam": "00:00"},
-    {"hari": "Selasa", "status": false, "jam": "00:00"},
-    {"hari": "Rabu", "status": false, "jam": "00:00"},
-    {"hari": "Kamis", "status": false, "jam": "00:00"},
-    {"hari": "Jumat", "status": false, "jam": "00:00"},
-    {"hari": "Sabtu", "status": false, "jam": "00:00"},
-    {"hari": "Minggu", "status": false, "jam": "00:00"},
-  ];
-
-  @override
-  void initState() {
-    setState(() {
-      _rutinitasWaktu[0]["status"] = _btnSenin;
-      _rutinitasWaktu[0]["jam"] = _jamSenin;
-      _rutinitasWaktu[1]["status"] = _btnSelasa;
-      _rutinitasWaktu[1]["jam"] = _jamSelasa;
-      _rutinitasWaktu[2]["status"] = _btnRabu;
-      _rutinitasWaktu[2]["jam"] = _jamRabu;
-      _rutinitasWaktu[3]["status"] = _btnKamis;
-      _rutinitasWaktu[3]["jam"] = _jamKamis;
-      _rutinitasWaktu[4]["status"] = _btnJumat;
-      _rutinitasWaktu[4]["jam"] = _jamJumat;
-      _rutinitasWaktu[5]["status"] = _btnSabtu;
-      _rutinitasWaktu[5]["jam"] = _jamSabtu;
-      _rutinitasWaktu[6]["status"] = _btnMinggu;
-      _rutinitasWaktu[6]["jam"] = _jamMinggu;
-    });
-    super.initState();
-  }
-
   //apabila teradi update
   GoodHabitModel? updateGoodHabit;
 
   Future<void> _onSubmit() async {
     formKey.currentState!.save();
     final newgoodHabit = GoodHabitModel(
-        id: nanoid(10),
         namaHabit: _namaHabit,
         motivasiHabit: _motivasiHabit,
-        rutinitasWaktu: _rutinitasWaktu,
-        totalCompleted: 0,
-        totalSkipped: 0);
+        rutinitasWaktu: [
+          {"hari": "Senin", "status": _btnSenin, "jam": _jamSenin},
+          {"hari": "Selasa", "status": _btnSelasa, "jam": _jamSelasa},
+          {"hari": "Rabu", "status": _btnRabu, "jam": _jamRabu},
+          {"hari": "Kamis", "status": _btnKamis, "jam": _jamKamis},
+          {"hari": "Jumat", "status": _btnJumat, "jam": _jamJumat},
+          {"hari": "Sabtu", "status": _btnSabtu, "jam": _jamSabtu},
+          {"hari": "Minggu", "status": _btnMinggu, "jam": _jamMinggu},
+        ],
+        totalCompleted: 3,
+        totalSkipped: 4);
+
     print("goodHabit:$newgoodHabit");
     if (updateGoodHabit != null) {
-      newgoodHabit.id = updateGoodHabit!.id;
+      final currentgoodHabit = GoodHabitModel(
+          namaHabit: _namaHabit,
+          motivasiHabit: _motivasiHabit,
+          rutinitasWaktu: [
+            {"hari": "Senin", "status": _btnSenin, "jam": _jamSenin},
+            {"hari": "Selasa", "status": _btnSelasa, "jam": _jamSelasa},
+            {"hari": "Rabu", "status": _btnRabu, "jam": _jamRabu},
+            {"hari": "Kamis", "status": _btnKamis, "jam": _jamKamis},
+            {"hari": "Jumat", "status": _btnJumat, "jam": _jamJumat},
+            {"hari": "Sabtu", "status": _btnSabtu, "jam": _jamSabtu},
+            {"hari": "Minggu", "status": _btnMinggu, "jam": _jamMinggu},
+          ],
+          totalCompleted: updateGoodHabit!.totalCompleted,
+          totalSkipped: updateGoodHabit!.totalSkipped);
+      currentgoodHabit.id = updateGoodHabit!.id;
+      Provider.of<GoodHabitProvider>(context, listen: false)
+          .update(currentgoodHabit);
     } else {
-      Provider.of<GoodHabitProvider>(context, listen: false).add(newgoodHabit);
+      await Provider.of<GoodHabitProvider>(context, listen: false)
+          .add(newgoodHabit);
     }
   }
 
@@ -100,14 +95,27 @@ class _EntryGoodHabitScreenState extends State<EntryGoodHabitScreen> {
     updateGoodHabit =
         ModalRoute.of(context)!.settings.arguments as GoodHabitModel?;
     if (updateGoodHabit != null) {
-      _namaHabit = updateGoodHabit!.namaHabit;
-      _motivasiHabit = updateGoodHabit!.motivasiHabit;
-      _rutinitasWaktu = updateGoodHabit!.rutinitasWaktu!;
+      _ctrlNamaHabit.text = updateGoodHabit!.namaHabit;
+      _ctrlMotivasiHabit.text = updateGoodHabit!.motivasiHabit;
+      _btnSenin = updateGoodHabit!.rutinitasWaktu![0]["status"];
+      _jamSenin = updateGoodHabit!.rutinitasWaktu![0]["jam"];
+      _btnSelasa = updateGoodHabit!.rutinitasWaktu![1]["status"];
+      _jamSelasa = updateGoodHabit!.rutinitasWaktu![1]["jam"];
+      _btnRabu = updateGoodHabit!.rutinitasWaktu![2]["status"];
+      _jamRabu = updateGoodHabit!.rutinitasWaktu![2]["jam"];
+      _btnKamis = updateGoodHabit!.rutinitasWaktu![3]["status"];
+      _jamKamis = updateGoodHabit!.rutinitasWaktu![3]["jam"];
+      _btnJumat = updateGoodHabit!.rutinitasWaktu![4]["status"];
+      _jamJumat = updateGoodHabit!.rutinitasWaktu![4]["jam"];
+      _btnSabtu = updateGoodHabit!.rutinitasWaktu![5]["status"];
+      _jamSabtu = updateGoodHabit!.rutinitasWaktu![5]["jam"];
+      _btnMinggu = updateGoodHabit!.rutinitasWaktu![6]["status"];
+      _jamMinggu = updateGoodHabit!.rutinitasWaktu![6]["jam"];
     }
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Add Habit",
+          updateGoodHabit != null ? "Edit Good Habit" : "Tambah Habit",
           style: GoogleFonts.quicksand(
               color: const Color.fromRGBO(53, 84, 56, 1),
               fontWeight: FontWeight.bold),
@@ -157,10 +165,15 @@ class _EntryGoodHabitScreenState extends State<EntryGoodHabitScreen> {
                       }
                       return null;
                     },
-                    onChanged: (value) {
-                      setState(() {
-                        _namaHabit = value;
-                      });
+                    // onChanged: (value) {
+                    //   setState(() {
+                    //     _namaHabit = value;
+                    //   });
+                    // },
+                    onSaved: (newValue) {
+                      if (newValue != null) {
+                        _namaHabit = newValue;
+                      }
                     },
                   ),
                   const SizedBox(
@@ -188,17 +201,19 @@ class _EntryGoodHabitScreenState extends State<EntryGoodHabitScreen> {
                       }
                       return null;
                     },
-                    onChanged: (value) {
-                      setState(() {
-                        _motivasiHabit = value;
-                      });
+                    onSaved: (newValue) {
+                      if (newValue != null) {
+                        _motivasiHabit = newValue;
+                      }
                     },
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   Text(
-                    "Pilih rutinitas",
+                    updateGoodHabit != null
+                        ? "habit yang sudah jalan\ntidak dapat diganti jadwalnya"
+                        : "pilih rutinitas",
                     style: GoogleFonts.quicksand(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
