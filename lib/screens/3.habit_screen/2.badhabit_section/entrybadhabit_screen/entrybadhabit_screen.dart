@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myhabitsv2/models/badhabit_model.dart';
@@ -6,6 +8,8 @@ import 'package:nanoid/nanoid.dart';
 import 'package:provider/provider.dart';
 
 class EntryBadHabitScreen extends StatefulWidget {
+  static const routeName =
+      "./onboarding/authindex/bottomnav/badhabit/entrybadhabit";
   const EntryBadHabitScreen({super.key});
 
   @override
@@ -15,22 +19,61 @@ class EntryBadHabitScreen extends StatefulWidget {
 class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
   var formKey = GlobalKey<FormState>();
 
-  TextEditingController _ctrlnamaHabitBuruk = TextEditingController();
-  TextEditingController _ctrlceritaHabitBuruk = TextEditingController();
-  TextEditingController _ctrlmotivasiHabitBuruk = TextEditingController();
-  TextEditingController _ctrlalternatifKegiatan = TextEditingController();
+  final TextEditingController _ctrlnamaHabitBuruk = TextEditingController();
+  final TextEditingController _ctrlceritaHabitBuruk = TextEditingController();
+  final TextEditingController _ctrlmotivasiHabitBuruk = TextEditingController();
+  final TextEditingController _ctrlalternatifKegiatan = TextEditingController();
 
-  String namaHabitBuruk = "",
-      ceritaHabitBuruk = "",
-      motivasiHabitBuruk = "",
-      alternatifKegiatan = "";
+  String namaHabitBuruk = "";
+  String ceritaHabitBuruk = "";
+  String motivasiHabitBuruk = "";
+  String alternatifKegiatan = "";
+
+  BadHabitModel? updateBadHabit;
+
+  int jam = 0;
+
+  Future<void> _onSubmit() async {
+    formKey.currentState!.save();
+
+    if (updateBadHabit != null) {
+      final currentBadHabit = BadHabitModel(
+          namaHabitBuruk: namaHabitBuruk,
+          ceritaHabitBuruk: ceritaHabitBuruk,
+          motivasiHabitBuruk: motivasiHabitBuruk,
+          alternatifKegiatan: alternatifKegiatan,
+          completed: updateBadHabit!.completed,
+          relapse: updateBadHabit!.relapse);
+      Provider.of<BadHabitProvider>(context, listen: false)
+          .update(currentBadHabit);
+    } else {
+      final newBadHabit = BadHabitModel(
+          namaHabitBuruk: namaHabitBuruk,
+          ceritaHabitBuruk: ceritaHabitBuruk,
+          motivasiHabitBuruk: motivasiHabitBuruk,
+          alternatifKegiatan: alternatifKegiatan,
+          completed: 0,
+          relapse: 0);
+      print("NEW BAD HABIT: ${newBadHabit.completed}");
+      await Provider.of<BadHabitProvider>(context, listen: false)
+          .add(newBadHabit);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    updateBadHabit =
+        ModalRoute.of(context)!.settings.arguments as BadHabitModel?;
+    if (updateBadHabit != null) {
+      _ctrlnamaHabitBuruk.text = updateBadHabit!.namaHabitBuruk;
+      _ctrlceritaHabitBuruk.text = updateBadHabit!.ceritaHabitBuruk;
+      _ctrlmotivasiHabitBuruk.text = updateBadHabit!.motivasiHabitBuruk;
+      _ctrlalternatifKegiatan.text = updateBadHabit!.alternatifKegiatan;
+    }
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            "Quit Habit",
+            updateBadHabit != null ? "Edit Bad Habit" : "Tambah Habit",
             style: GoogleFonts.quicksand(
                 color: const Color.fromRGBO(53, 84, 56, 1),
                 fontWeight: FontWeight.bold),
@@ -79,10 +122,10 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
                           }
                           return null;
                         },
-                        onChanged: (value) {
-                          setState(() {
-                            namaHabitBuruk = value;
-                          });
+                        onSaved: (newValue) {
+                          if (newValue != null) {
+                            namaHabitBuruk = newValue;
+                          }
                         },
                       ),
                       const SizedBox(
@@ -109,10 +152,10 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
                           }
                           return null;
                         },
-                        onChanged: (value) {
-                          setState(() {
-                            ceritaHabitBuruk = value;
-                          });
+                        onSaved: (newValue) {
+                          if (newValue != null) {
+                            ceritaHabitBuruk = newValue;
+                          }
                         },
                       ),
                       const SizedBox(
@@ -139,10 +182,10 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
                           }
                           return null;
                         },
-                        onChanged: (value) {
-                          setState(() {
-                            motivasiHabitBuruk = value;
-                          });
+                        onSaved: (newValue) {
+                          if (newValue != null) {
+                            motivasiHabitBuruk = newValue;
+                          }
                         },
                       ),
                       const SizedBox(
@@ -169,10 +212,10 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
                           }
                           return null;
                         },
-                        onChanged: (value) {
-                          setState(() {
-                            alternatifKegiatan = value;
-                          });
+                        onSaved: (newValue) {
+                          if (newValue != null) {
+                            alternatifKegiatan = newValue;
+                          }
                         },
                       ),
                       const SizedBox(
@@ -187,17 +230,7 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
                             child: ElevatedButton(
                               onPressed: () {
                                 if (formKey.currentState!.validate()) {
-                                  formKey.currentState!.save();
-                                  final badHabit = BadHabitModel(
-                                      namaHabitBuruk: namaHabitBuruk,
-                                      ceritaHabitBuruk: ceritaHabitBuruk,
-                                      motivasiHabitBuruk: motivasiHabitBuruk,
-                                      alternatifKegiatan: alternatifKegiatan,
-                                      completed: 0,
-                                      relapse: 0);
-                                  Provider.of<BadHabitProvider>(context,
-                                          listen: false)
-                                      .add(badHabit);
+                                  _onSubmit();
                                   Navigator.of(context).pop();
                                 }
                               },

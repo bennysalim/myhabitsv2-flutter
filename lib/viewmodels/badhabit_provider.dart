@@ -22,11 +22,35 @@ class BadHabitProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> add(BadHabitModel goodHabitModel) async {
-    final result = await _service.postBadHabitToAPI(goodHabitModel);
+  Future<void> add(BadHabitModel badHabitModel) async {
+    final result = await _service.postBadHabitToAPI(badHabitModel);
     if (result.id != null) {
       _badHabit.add(result);
       notifyListeners();
+    }
+  }
+
+  void update(BadHabitModel badHabitModel) async {
+    final targetIndex =
+        _badHabit.indexWhere((element) => element.id == badHabitModel.id);
+    if (targetIndex != -1) {
+      final isSuccess = await _service.putHabitToAPI(badHabitModel);
+      if (isSuccess) {
+        _badHabit[targetIndex] = badHabitModel;
+        notifyListeners();
+      }
+    }
+  }
+
+  void updatePerSeconds(BadHabitModel badHabitModel) async {
+    final targetIndex =
+        _badHabit.indexWhere((element) => element.id == badHabitModel.id);
+    if (targetIndex != -1) {
+      final isSuccess = await _service.updatePerSeconds(badHabitModel);
+      if (isSuccess) {
+        _badHabit[targetIndex] = badHabitModel;
+        notifyListeners();
+      }
     }
   }
 

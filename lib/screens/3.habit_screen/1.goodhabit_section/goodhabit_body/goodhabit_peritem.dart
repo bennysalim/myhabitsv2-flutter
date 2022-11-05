@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../models/goodhabit_model.dart';
@@ -16,6 +17,32 @@ class GoodHabitPerItem extends StatefulWidget {
 
 class _GoodHabitPerItemState extends State<GoodHabitPerItem> {
   bool isChecked = false;
+  final hari = DateFormat('EEEE').format(DateTime.now()).toString();
+  String jam = "";
+
+  @override
+  void didChangeDependencies() {
+    setState(() {
+      if (hari == "Monday") {
+        jam = widget.goodHabit.rutinitasWaktu![0]["jam"];
+      } else if (hari == "Tuesday") {
+        jam = widget.goodHabit.rutinitasWaktu![1]["jam"];
+      } else if (hari == "Wednesday") {
+        jam = widget.goodHabit.rutinitasWaktu![2]["jam"];
+      } else if (hari == "Thursday") {
+        jam = widget.goodHabit.rutinitasWaktu![3]["jam"];
+      } else if (hari == "Friday") {
+        jam = widget.goodHabit.rutinitasWaktu![4]["jam"];
+      } else if (hari == "Saturday") {
+        jam = widget.goodHabit.rutinitasWaktu![5]["jam"];
+      } else if (hari == "Sunday") {
+        jam = widget.goodHabit.rutinitasWaktu![6]["jam"];
+      }
+    });
+
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -157,7 +184,7 @@ class _GoodHabitPerItemState extends State<GoodHabitPerItem> {
                         width: 4,
                       ),
                       Text(
-                        "08:00",
+                        jam,
                         textAlign: TextAlign.start,
                         style: GoogleFonts.quicksand(
                           fontWeight: FontWeight.bold,

@@ -62,8 +62,8 @@ class _EntryGoodHabitScreenState extends State<EntryGoodHabitScreen> {
           {"hari": "Sabtu", "status": _btnSabtu, "jam": _jamSabtu},
           {"hari": "Minggu", "status": _btnMinggu, "jam": _jamMinggu},
         ],
-        totalCompleted: 3,
-        totalSkipped: 4);
+        totalCompleted: 0,
+        totalSkipped: 0);
 
     print("goodHabit:$newgoodHabit");
     if (updateGoodHabit != null) {

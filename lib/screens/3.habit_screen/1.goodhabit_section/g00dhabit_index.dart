@@ -19,7 +19,7 @@ class _GoodHabitIndexState extends State<GoodHabitIndex> {
   void didChangeDependencies() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<GoodHabitProvider>(context, listen: false)
-          .getAllGoodHabitData();
+          .getAllGoodHabitDataPerDay();
     });
     super.didChangeDependencies();
   }

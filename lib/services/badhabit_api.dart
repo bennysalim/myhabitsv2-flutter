@@ -58,15 +58,43 @@ class BadHabitAPI {
     return badHabit;
   }
 
+  //4. edit bad habit data
+
+  Future<bool> putHabitToAPI(BadHabitModel badHabit) async {
+    final resp = await _dio.get("$_baseURL/$_userUID/badhabits.json");
+    String keys = "";
+    resp.data.forEach((key, value) {
+      if (value["id"] == badHabit.id) {
+        keys = key;
+      }
+    });
+    final response = await _dio.put(
+        "$_baseURL/$_userUID/badhabits/${badHabit.id}.json",
+        data: badHabit.toJSON());
+    return true;
+  }
+
+  Future<bool> updatePerSeconds(BadHabitModel badHabit) async {
+    final resp = await _dio.get("$_baseURL/$_userUID/badhabits.json");
+    String keys = "";
+    resp.data.forEach((key, value) {
+      if (value["id"] == badHabit.id) {
+        keys = key;
+      }
+    });
+    final response = await _dio.put(
+        "$_baseURL/$_userUID/badhabits/${badHabit.id}.json",
+        data: badHabit.toJSON());
+    return true;
+  }
+
   //3. delete bad habit data
   Future<bool> deleteHabitToAPI(String id) async {
     // getUserID();
 
     final response =
         await _dio.delete("$_baseURL/$_userUID/badhabits/$id.json");
-    if (response.data['badhabits']['affectedRows'] > 0) {
-      return true;
-    }
-    return false;
+
+    return true;
   }
 }

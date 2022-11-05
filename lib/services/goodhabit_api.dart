@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:myhabitsv2/models/goodhabit_model.dart';
 import 'dart:convert';
 
@@ -42,6 +43,99 @@ class GoodHabitAPI {
             rutinitasWaktu: value["rutinitasWaktu"].toList(),
             totalCompleted: value["totalCompleted"],
             totalSkipped: value["totalSkipped"]));
+      });
+      return goodHabit;
+    }
+    return [];
+  }
+
+  Future<List<GoodHabitModel>> getGoodHabitFromAPIPerDay() async {
+    final hari = DateFormat('EEEE').format(DateTime.now()).toString();
+    final response = await _dio.get("$_baseURL/$_userUID/goodhabits.json");
+    // response.data merupakan _internallinkedhashmap<String, dynamic>
+    //TYPE
+    List<GoodHabitModel> goodHabit = [];
+    if (response.data != null) {
+      response.data.forEach((key, value) {
+        print("keymap: $key:$value");
+        if (hari == "Monday") {
+          if (value["rutinitasWaktu"][0]["hari"] == "Minggu" &&
+              value["rutinitasWaktu"][0]["status"] == true) {
+            goodHabit.add(GoodHabitModel(
+                id: key.toString(),
+                namaHabit: value["namaHabit"].toString(),
+                motivasiHabit: value["motivasiHabit"].toString(),
+                rutinitasWaktu: value["rutinitasWaktu"].toList(),
+                totalCompleted: value["totalCompleted"],
+                totalSkipped: value["totalSkipped"]));
+          }
+        } else if (hari == "Tuesday") {
+          if (value["rutinitasWaktu"][1]["hari"] == "Selasa" &&
+              value["rutinitasWaktu"][1]["status"] == true) {
+            goodHabit.add(GoodHabitModel(
+                id: key.toString(),
+                namaHabit: value["namaHabit"].toString(),
+                motivasiHabit: value["motivasiHabit"].toString(),
+                rutinitasWaktu: value["rutinitasWaktu"].toList(),
+                totalCompleted: value["totalCompleted"],
+                totalSkipped: value["totalSkipped"]));
+          }
+        } else if (hari == "Wednesday") {
+          if (value["rutinitasWaktu"][2]["hari"] == "Rabu" &&
+              value["rutinitasWaktu"][2]["status"] == true) {
+            goodHabit.add(GoodHabitModel(
+                id: key.toString(),
+                namaHabit: value["namaHabit"].toString(),
+                motivasiHabit: value["motivasiHabit"].toString(),
+                rutinitasWaktu: value["rutinitasWaktu"].toList(),
+                totalCompleted: value["totalCompleted"],
+                totalSkipped: value["totalSkipped"]));
+          }
+        } else if (hari == "Thursday") {
+          if (value["rutinitasWaktu"][3]["hari"] == "Kamis" &&
+              value["rutinitasWaktu"][3]["status"] == true) {
+            goodHabit.add(GoodHabitModel(
+                id: key.toString(),
+                namaHabit: value["namaHabit"].toString(),
+                motivasiHabit: value["motivasiHabit"].toString(),
+                rutinitasWaktu: value["rutinitasWaktu"].toList(),
+                totalCompleted: value["totalCompleted"],
+                totalSkipped: value["totalSkipped"]));
+          }
+        } else if (hari == "Friday") {
+          if (value["rutinitasWaktu"][4]["hari"] == "Jumat" &&
+              value["rutinitasWaktu"][4]["status"] == true) {
+            goodHabit.add(GoodHabitModel(
+                id: key.toString(),
+                namaHabit: value["namaHabit"].toString(),
+                motivasiHabit: value["motivasiHabit"].toString(),
+                rutinitasWaktu: value["rutinitasWaktu"].toList(),
+                totalCompleted: value["totalCompleted"],
+                totalSkipped: value["totalSkipped"]));
+          }
+        } else if (hari == "Saturday") {
+          if (value["rutinitasWaktu"][5]["hari"] == "Sabtu" &&
+              value["rutinitasWaktu"][5]["status"] == true) {
+            goodHabit.add(GoodHabitModel(
+                id: key.toString(),
+                namaHabit: value["namaHabit"].toString(),
+                motivasiHabit: value["motivasiHabit"].toString(),
+                rutinitasWaktu: value["rutinitasWaktu"].toList(),
+                totalCompleted: value["totalCompleted"],
+                totalSkipped: value["totalSkipped"]));
+          }
+        } else if (hari == "Sunday") {
+          if (value["rutinitasWaktu"][6]["hari"] == "Minggu" &&
+              value["rutinitasWaktu"][6]["status"] == true) {
+            goodHabit.add(GoodHabitModel(
+                id: key.toString(),
+                namaHabit: value["namaHabit"].toString(),
+                motivasiHabit: value["motivasiHabit"].toString(),
+                rutinitasWaktu: value["rutinitasWaktu"].toList(),
+                totalCompleted: value["totalCompleted"],
+                totalSkipped: value["totalSkipped"]));
+          }
+        }
       });
       return goodHabit;
     }

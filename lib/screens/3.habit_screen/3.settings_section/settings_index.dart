@@ -16,7 +16,7 @@ class SettingsIndex extends StatefulWidget {
 
 class _SettingsIndexState extends State<SettingsIndex> {
   var _email = "Email: ";
-  var _nama = "";
+  var _nama = "Benny Septiawan Salim";
   //pembuatan variabel provider untuk mengambil data dari sharedpreferences
   late SharedPreferences sharedPreferences =
       Provider.of<UserSharedPreferenceProvider>(context, listen: false).prefs;

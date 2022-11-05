@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:myhabitsv2/models/goodhabit_model.dart';
-import 'package:myhabitsv2/screens/3.habit_screen/1.goodhabit_section/entrygoodhabit_screen/entrygoodhabit_screen.dart';
-import 'package:myhabitsv2/screens/3.habit_screen/1.goodhabit_section/goodhabit_body/goodhabit_item.dart';
-import 'package:myhabitsv2/services/goodhabit_api.dart';
 import 'package:myhabitsv2/viewmodels/goodhabit_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +22,7 @@ class _MainGoodHabitScreenState extends State<MainGoodHabitScreen> {
   @override
   Widget build(BuildContext context) {
     final goodHabit = Provider.of<GoodHabitProvider>(context).goodHabit;
+    print("LENGTH : ${goodHabit.length}");
     // print(contoh);
     return Container(
         padding: const EdgeInsets.only(top: 18, left: 18, right: 18),

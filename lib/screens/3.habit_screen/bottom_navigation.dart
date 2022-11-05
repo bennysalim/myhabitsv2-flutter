@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:myhabitsv2/screens/3.habit_screen/1.goodhabit_section/g00dhabit_index.dart';
+import 'package:myhabitsv2/viewmodels/badhabit_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/badhabit_model.dart';
 import '../../viewmodels/goodhabit_provider.dart';
 import '2.badhabit_section/badhabit_index.dart';
 import '3.settings_section/settings_index.dart';
@@ -18,48 +22,6 @@ class MyHabitsBottomNavigation extends StatefulWidget {
 }
 
 class _MyHabitsBottomNavigationState extends State<MyHabitsBottomNavigation> {
-  var date = DateFormat('EEEE').format(DateTime.now()).toString();
-  @override
-  void didChangeDependencies() {
-    if (date == "Monday") {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        Provider.of<GoodHabitProvider>(context, listen: false)
-            .getAllGoodHabitData();
-      });
-    } else if (date == "Tuesday") {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        Provider.of<GoodHabitProvider>(context, listen: false)
-            .getAllGoodHabitData();
-      });
-    } else if (date == "Wednesday") {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        Provider.of<GoodHabitProvider>(context, listen: false)
-            .getAllGoodHabitData();
-      });
-    } else if (date == "Thursday") {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        Provider.of<GoodHabitProvider>(context, listen: false)
-            .getAllGoodHabitData();
-      });
-    } else if (date == "Friday") {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        Provider.of<GoodHabitProvider>(context, listen: false)
-            .getAllGoodHabitData();
-      });
-    } else if (date == "Saturday") {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        Provider.of<GoodHabitProvider>(context, listen: false)
-            .getAllGoodHabitData();
-      });
-    } else if (date == "Sunday") {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        Provider.of<GoodHabitProvider>(context, listen: false)
-            .getAllGoodHabitData();
-      });
-    }
-    super.didChangeDependencies();
-  }
-
   @override
   void initState() {
     FirebaseAuth.instance.authStateChanges().listen(

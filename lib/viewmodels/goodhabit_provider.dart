@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:myhabitsv2/models/goodhabit_model.dart';
 import 'package:myhabitsv2/services/goodhabit_api.dart';
 
@@ -17,6 +18,12 @@ class GoodHabitProvider with ChangeNotifier {
 
   Future<void> getAllGoodHabitData() async {
     final result = await _service.getAllGoodHabitFromAPI();
+    _goodHabit = result;
+    notifyListeners();
+  }
+
+  Future<void> getAllGoodHabitDataPerDay() async {
+    final result = await _service.getGoodHabitFromAPIPerDay();
     _goodHabit = result;
     notifyListeners();
   }

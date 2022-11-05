@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class BadHabitModel {
@@ -6,16 +8,16 @@ class BadHabitModel {
       ceritaHabitBuruk,
       motivasiHabitBuruk,
       alternatifKegiatan;
-  int completed;
-  int relapse;
+  int? completed;
+  int? relapse;
   BadHabitModel(
       {this.id,
       required this.namaHabitBuruk,
       required this.ceritaHabitBuruk,
       required this.motivasiHabitBuruk,
       required this.alternatifKegiatan,
-      required this.completed,
-      required this.relapse});
+      this.completed,
+      this.relapse});
 
   factory BadHabitModel.fromJSON(Map<String, dynamic> json) => BadHabitModel(
         id: json["id"],
