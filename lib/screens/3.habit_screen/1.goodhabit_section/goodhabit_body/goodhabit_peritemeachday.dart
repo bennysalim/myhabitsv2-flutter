@@ -2,22 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../models/goodhabit_model.dart';
 import '../../../../viewmodels/goodhabit_provider.dart';
 import '../entrygoodhabit_screen/entrygoodhabit_screen.dart';
 
-class GoodHabitPerItem extends StatefulWidget {
+class GoodHabitPerItemEachDay extends StatefulWidget {
   final GoodHabitModel goodHabit;
-  const GoodHabitPerItem({super.key, required this.goodHabit});
+  const GoodHabitPerItemEachDay({super.key, required this.goodHabit});
 
   @override
-  State<GoodHabitPerItem> createState() => _GoodHabitPerItemState();
+  State<GoodHabitPerItemEachDay> createState() => _GoodHabitPerItemState();
 }
 
-class _GoodHabitPerItemState extends State<GoodHabitPerItem> {
-  bool isChecked = false;
+class _GoodHabitPerItemState extends State<GoodHabitPerItemEachDay> {
+  late bool isChecked;
+  late bool isSkipped;
   final hari = DateFormat('EEEE').format(DateTime.now()).toString();
+  final currentTime = DateTime.now();
   String jam = "";
 
   @override
@@ -44,7 +47,62 @@ class _GoodHabitPerItemState extends State<GoodHabitPerItem> {
   }
 
   @override
+  void initState() {
+    setState(() {
+      if (hari == "Monday") {
+        isChecked = false;
+        isSkipped = false;
+      } else if (hari == "Tuesday") {
+        isChecked = false;
+        isSkipped = false;
+      } else if (hari == "Wednesday") {
+        isChecked = false;
+        isSkipped = false;
+      } else if (hari == "Thursday") {
+        isChecked = false;
+        isSkipped = false;
+      } else if (hari == "Friday") {
+        isChecked = false;
+        isSkipped = false;
+      } else if (hari == "Saturday") {
+        isChecked = false;
+        isSkipped = false;
+      } else if (hari == "Sunday") {
+        isChecked = false;
+        isSkipped = false;
+      }
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Future<void> _onComplete() async {
+      final habitCompleted = GoodHabitModel(
+          namaHabit: widget.goodHabit.namaHabit,
+          motivasiHabit: widget.goodHabit.motivasiHabit,
+          rutinitasWaktu: widget.goodHabit.rutinitasWaktu,
+          totalCompleted: widget.goodHabit.totalCompleted! + 1,
+          totalSkipped: widget.goodHabit.totalSkipped);
+
+      habitCompleted.id = widget.goodHabit.id;
+      print("Completed Habit: ${widget.goodHabit.totalCompleted}");
+      Provider.of<GoodHabitProvider>(context, listen: false)
+          .update(habitCompleted);
+    }
+
+    Future<void> _onSkipped() async {
+      final habitSkipped = GoodHabitModel(
+          namaHabit: widget.goodHabit.namaHabit,
+          motivasiHabit: widget.goodHabit.motivasiHabit,
+          rutinitasWaktu: widget.goodHabit.rutinitasWaktu,
+          totalCompleted: widget.goodHabit.totalCompleted,
+          totalSkipped: widget.goodHabit.totalSkipped! + 1);
+      habitSkipped.id = widget.goodHabit.id;
+      Provider.of<GoodHabitProvider>(context, listen: false)
+          .update(habitSkipped);
+    }
+
     return Container(
       margin: const EdgeInsets.only(top: 8, bottom: 8),
       padding: const EdgeInsets.all(14),
@@ -127,22 +185,81 @@ class _GoodHabitPerItemState extends State<GoodHabitPerItem> {
                     width: 4,
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () async {
+                      await showModalBottomSheet(
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                                bottomRight: Radius.zero,
+                                bottomLeft: Radius.zero),
+                          ),
+                          context: context,
+                          builder: (context) {
+                            return Container(
+                                padding: const EdgeInsets.all(30),
+                                width: 400,
+                                height: 250,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "Habit '${widget.goodHabit.namaHabit}' Skipped?",
+                                      style: GoogleFonts.quicksand(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17,
+                                        color:
+                                            const Color.fromRGBO(53, 84, 56, 1),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: TextButton(
+                                              onPressed: () async {
+                                                await _onSkipped();
+                                                setState(() {
+                                                  isSkipped = !isSkipped;
+                                                });
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text("Skip")),
+                                        ),
+                                        Expanded(
+                                          child: TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text("Batal")),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ));
+                          });
+                    },
                     child: Container(
                       padding: const EdgeInsets.all(3),
                       decoration: BoxDecoration(
                           border: Border.all(
                             color: const Color.fromRGBO(187, 26, 26, 1),
                           ),
+                          color: isSkipped
+                              ? const Color.fromRGBO(187, 26, 26, 1)
+                              : Colors.white,
                           borderRadius: BorderRadius.circular(5)),
                       child: Row(
                         children: [
                           Text(
-                            "Skip",
+                            isSkipped ? "Skipped" : "Skip",
                             style: GoogleFonts.quicksand(
                               fontWeight: FontWeight.bold,
                               fontSize: 10,
-                              color: const Color.fromRGBO(187, 26, 26, 1),
+                              color: isSkipped
+                                  ? Colors.white
+                                  : const Color.fromRGBO(187, 26, 26, 1),
                             ),
                           ),
                         ],
@@ -225,9 +342,8 @@ class _GoodHabitPerItemState extends State<GoodHabitPerItem> {
                       ),
                       Container(
                         decoration: const BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          color: Color.fromRGBO(187, 26, 26, 1),
-                        ),
+                            shape: BoxShape.rectangle,
+                            color: Color.fromRGBO(187, 26, 26, 1)),
                         padding: const EdgeInsets.all(5),
                       ),
                       const SizedBox(
@@ -247,23 +363,86 @@ class _GoodHabitPerItemState extends State<GoodHabitPerItem> {
                 ],
               ),
               InkWell(
-                onTap: () {
-                  setState(() {
-                    isChecked = !isChecked;
-                  });
+                onTap: () async {
+                  await showModalBottomSheet(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                            bottomRight: Radius.zero,
+                            bottomLeft: Radius.zero),
+                      ),
+                      context: context,
+                      builder: (context) {
+                        return Container(
+                            padding: const EdgeInsets.all(30),
+                            width: 400,
+                            height: 250,
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Habit '${widget.goodHabit.namaHabit}' Complete?",
+                                  style: GoogleFonts.quicksand(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17,
+                                    color: const Color.fromRGBO(53, 84, 56, 1),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextButton(
+                                          onPressed: () async {
+                                            await _onComplete();
+                                            setState(() {
+                                              isChecked = !isChecked;
+                                            });
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text("Complete")),
+                                    ),
+                                    Expanded(
+                                      child: TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text("Batal")),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ));
+                      });
                 },
                 child: Container(
                   decoration: BoxDecoration(
                       border: Border.all(
-                        color: const Color.fromRGBO(53, 84, 56, 1),
+                        color: isSkipped
+                            ? const Color.fromRGBO(187, 26, 26, 1)
+                            : const Color.fromRGBO(53, 84, 56, 1),
                       ),
                       borderRadius: BorderRadius.circular(100)),
-                  child: const CircleAvatar(
-                      backgroundColor: Colors.white,
+                  child: CircleAvatar(
+                      backgroundColor: isChecked
+                          ? const Color.fromRGBO(53, 84, 56, 1)
+                          : isSkipped
+                              ? const Color.fromRGBO(187, 26, 26, 1)
+                              : Colors.white,
                       radius: 28,
                       child: Icon(
-                        Icons.check,
-                        color: Color.fromRGBO(53, 84, 56, 1),
+                        isChecked
+                            ? Icons.check
+                            : isSkipped
+                                ? Icons.close
+                                : Icons.check,
+                        color: isChecked
+                            ? Colors.white
+                            : isSkipped
+                                ? Colors.white
+                                : const Color.fromRGBO(53, 84, 56, 1),
                       )),
                 ),
               ),

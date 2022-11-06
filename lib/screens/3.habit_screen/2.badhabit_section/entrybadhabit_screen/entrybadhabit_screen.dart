@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myhabitsv2/models/badhabit_model.dart';
+import 'package:myhabitsv2/screens/3.habit_screen/bottom_navigation.dart';
 import 'package:myhabitsv2/viewmodels/badhabit_provider.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:provider/provider.dart';
@@ -231,6 +232,7 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
                               onPressed: () {
                                 if (formKey.currentState!.validate()) {
                                   _onSubmit();
+
                                   Navigator.of(context).pop();
                                 }
                               },

@@ -669,8 +669,24 @@ class _EntryGoodHabitScreenState extends State<EntryGoodHabitScreen> {
                                 );
                               } else {
                                 await _onSubmit();
-                                Navigator.of(context).pushNamed(
-                                    MyHabitsBottomNavigation.routeName);
+                                // Navigator.of(context).pushNamed(
+                                //     MyHabitsBottomNavigation.routeName);
+                                Navigator.of(context).push(
+                                  PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                        secondaryAnimation) {
+                                      return const MyHabitsBottomNavigation();
+                                    },
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      final tween = Tween(begin: 0.0, end: 1.0);
+                                      return FadeTransition(
+                                        opacity: animation.drive(tween),
+                                        child: child,
+                                      );
+                                    },
+                                  ),
+                                );
                               }
                             }
                           },

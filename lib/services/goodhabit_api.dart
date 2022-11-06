@@ -35,7 +35,6 @@ class GoodHabitAPI {
 
     if (response.data != null) {
       response.data.forEach((key, value) {
-        print("keymap: $key:$value");
         goodHabit.add(GoodHabitModel(
             id: key.toString(),
             namaHabit: value["namaHabit"].toString(),
@@ -57,7 +56,6 @@ class GoodHabitAPI {
     List<GoodHabitModel> goodHabit = [];
     if (response.data != null) {
       response.data.forEach((key, value) {
-        print("keymap: $key:$value");
         if (hari == "Monday") {
           if (value["rutinitasWaktu"][0]["hari"] == "Minggu" &&
               value["rutinitasWaktu"][0]["status"] == true) {

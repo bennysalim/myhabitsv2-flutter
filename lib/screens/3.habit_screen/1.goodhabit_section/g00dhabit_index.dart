@@ -46,8 +46,19 @@ class _GoodHabitIndexState extends State<GoodHabitIndex> {
               child: IconButton(
                 onPressed: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const EntryGoodHabitScreen(),
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return const EntryGoodHabitScreen();
+                      },
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        final tween =
+                            Tween(begin: const Offset(1, 0), end: Offset.zero);
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
                     ),
                   );
                 },

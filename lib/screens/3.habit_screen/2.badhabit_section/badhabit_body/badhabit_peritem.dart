@@ -17,6 +17,42 @@ class BadHabitPerItem extends StatefulWidget {
 }
 
 class _BadHabitPerItemState extends State<BadHabitPerItem> {
+  Future<void> _onComplete() async {
+    if (widget.badHabit != null) {
+      final abstinenceTime = BadHabitModel(
+          namaHabitBuruk: widget.badHabit.namaHabitBuruk,
+          ceritaHabitBuruk: widget.badHabit.ceritaHabitBuruk,
+          motivasiHabitBuruk: widget.badHabit.motivasiHabitBuruk,
+          alternatifKegiatan: widget.badHabit.alternatifKegiatan,
+          completed: widget.badHabit.completed! + 1,
+          relapse: widget.badHabit.relapse);
+
+      abstinenceTime.id = widget.badHabit.id;
+      Provider.of<BadHabitProvider>(context, listen: false)
+          .update(abstinenceTime);
+    }
+  }
+
+  Future<void> _onRelapse() async {
+    final relapse = BadHabitModel(
+        namaHabitBuruk: widget.badHabit.namaHabitBuruk,
+        ceritaHabitBuruk: widget.badHabit.ceritaHabitBuruk,
+        motivasiHabitBuruk: widget.badHabit.motivasiHabitBuruk,
+        alternatifKegiatan: widget.badHabit.alternatifKegiatan,
+        completed: 0,
+        relapse: widget.badHabit.relapse! + 1);
+    relapse.id = widget.badHabit.id;
+    Provider.of<BadHabitProvider>(context, listen: false).update(relapse);
+  }
+
+  @override
+  void initState() {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      _onComplete();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -111,7 +147,7 @@ class _BadHabitPerItemState extends State<BadHabitPerItem> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Completed: ${widget.badHabit.completed} days",
+                    "Abstinence Time: ${widget.badHabit.completed} seconds",
                     style: GoogleFonts.quicksand(
                       fontWeight: FontWeight.bold,
                       fontSize: 11,
@@ -133,7 +169,32 @@ class _BadHabitPerItemState extends State<BadHabitPerItem> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text("Yakin mau relapse?"),
+                                  content: Text(
+                                      "Cerita : ${widget.badHabit.ceritaHabitBuruk} \n\nMotivasi : ${widget.badHabit.motivasiHabitBuruk}\n\nAlternatif Kegiatan : ${widget.badHabit.alternatifKegiatan}"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text("Masih bisa survive!"),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        await _onRelapse();
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text("Ulang dari 0"),
+                                    ),
+                                  ],
+                                );
+                              });
+                        },
                         child: Container(
                           padding: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
