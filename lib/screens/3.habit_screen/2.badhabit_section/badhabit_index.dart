@@ -30,7 +30,7 @@ class _BadHabitIndexState extends State<BadHabitIndex> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Quit Habit",
+          "Bad Habit",
           style: GoogleFonts.quicksand(
               color: const Color.fromRGBO(53, 84, 56, 1),
               fontWeight: FontWeight.bold),

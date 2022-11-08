@@ -25,14 +25,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
     "nama": "",
   };
   //pembuatan variabel provider untuk mengambil data dari sharedpreferences
-  late SharedPreferences sharedPreferences =
-      Provider.of<UserSharedPreferenceProvider>(context, listen: false).prefs;
+  late SharedPreferences sharedPreferences;
 
   //pembuatan variabel inisiasi UID Pertama
   String _userUID = "";
 
+  //void initialize sharedPreferences instance
+  void initialize() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+  }
+
   @override
   void initState() {
+    initialize();
     //fungsi initstate untuk pengaturan UID langsung pertama kali
     setState(() {
       FirebaseAuth.instance.authStateChanges().listen((User? user) {
@@ -41,9 +46,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
       });
     });
-    // memanggil fungsi initialpreference() dari provider;
-    Provider.of<UserSharedPreferenceProvider>(context, listen: false)
-        .getSharedPreferenceInstance();
     super.initState();
   }
 
@@ -208,8 +210,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           //pemanggilan fungsi mengirimkan data username ke API
                           postUsernameToAPI(_username);
                           //pengaturan sharedpreference untuk mengubah isneedlogin true menjadi false
-                          sharedPreferences.setString(
-                              "username", _ctrlUsername.text);
                           sharedPreferences.setBool("isNeedLogin", false);
                           //proses navigator
                           Navigator.of(context)

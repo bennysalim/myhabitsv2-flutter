@@ -57,7 +57,7 @@ class GoodHabitAPI {
     if (response.data != null) {
       response.data.forEach((key, value) {
         if (hari == "Monday") {
-          if (value["rutinitasWaktu"][0]["hari"] == "Minggu" &&
+          if (value["rutinitasWaktu"][0]["hari"] == "Senin" &&
               value["rutinitasWaktu"][0]["status"] == true) {
             goodHabit.add(GoodHabitModel(
                 id: key.toString(),

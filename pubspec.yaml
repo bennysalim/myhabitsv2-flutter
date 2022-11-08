@@ -50,6 +50,8 @@ dependencies:
   nanoid: ^1.0.0
 
 dev_dependencies:
+  mockito:
+  build_runner:
   flutter_test:
     sdk: flutter
 

@@ -18,7 +18,7 @@ class EntryBadHabitScreen extends StatefulWidget {
 }
 
 class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
-  var formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   final TextEditingController _ctrlnamaHabitBuruk = TextEditingController();
   final TextEditingController _ctrlceritaHabitBuruk = TextEditingController();
@@ -36,7 +36,13 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
 
   Future<void> _onSubmit() async {
     formKey.currentState!.save();
-
+    final newBadHabit = BadHabitModel(
+        namaHabitBuruk: namaHabitBuruk,
+        ceritaHabitBuruk: ceritaHabitBuruk,
+        motivasiHabitBuruk: motivasiHabitBuruk,
+        alternatifKegiatan: alternatifKegiatan,
+        completed: 0,
+        relapse: 0);
     if (updateBadHabit != null) {
       final currentBadHabit = BadHabitModel(
           namaHabitBuruk: namaHabitBuruk,
@@ -45,17 +51,10 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
           alternatifKegiatan: alternatifKegiatan,
           completed: updateBadHabit!.completed,
           relapse: updateBadHabit!.relapse);
+      currentBadHabit.id = updateBadHabit!.id;
       Provider.of<BadHabitProvider>(context, listen: false)
           .update(currentBadHabit);
     } else {
-      final newBadHabit = BadHabitModel(
-          namaHabitBuruk: namaHabitBuruk,
-          ceritaHabitBuruk: ceritaHabitBuruk,
-          motivasiHabitBuruk: motivasiHabitBuruk,
-          alternatifKegiatan: alternatifKegiatan,
-          completed: 0,
-          relapse: 0);
-      print("NEW BAD HABIT: ${newBadHabit.completed}");
       await Provider.of<BadHabitProvider>(context, listen: false)
           .add(newBadHabit);
     }
@@ -111,6 +110,7 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
                         ),
                       ),
                       TextFormField(
+                        controller: _ctrlnamaHabitBuruk,
                         decoration: InputDecoration(
                           hintText: "stop merokok...",
                           hintStyle: GoogleFonts.quicksand(
@@ -141,6 +141,7 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
                         ),
                       ),
                       TextFormField(
+                        controller: _ctrlceritaHabitBuruk,
                         decoration: InputDecoration(
                           hintText: "saya kecanduan...",
                           hintStyle: GoogleFonts.quicksand(
@@ -171,6 +172,7 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
                         ),
                       ),
                       TextFormField(
+                        controller: _ctrlmotivasiHabitBuruk,
                         decoration: InputDecoration(
                           hintText: "tuliskan motivasi kamu..",
                           hintStyle: GoogleFonts.quicksand(
@@ -201,6 +203,7 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
                         ),
                       ),
                       TextFormField(
+                        controller: _ctrlalternatifKegiatan,
                         decoration: InputDecoration(
                           hintText: "saya mau melakukan...",
                           hintStyle: GoogleFonts.quicksand(
@@ -229,10 +232,9 @@ class _EntryBadHabitScreenState extends State<EntryBadHabitScreen> {
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 if (formKey.currentState!.validate()) {
-                                  _onSubmit();
-
+                                  await _onSubmit();
                                   Navigator.of(context).pop();
                                 }
                               },

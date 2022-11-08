@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myhabitsv2/models/user_model.dart';
+import 'package:myhabitsv2/viewmodels/user_provider.dart';
+import 'package:provider/provider.dart';
 
-class MyHabitsInfoScreen extends StatelessWidget {
+class MyHabitsInfoScreen extends StatefulWidget {
   const MyHabitsInfoScreen({super.key});
+
+  @override
+  State<MyHabitsInfoScreen> createState() => _MyHabitsInfoScreenState();
+}
+
+class _MyHabitsInfoScreenState extends State<MyHabitsInfoScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

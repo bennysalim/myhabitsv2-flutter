@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:myhabitsv2/screens/2.auth_screen/auth_index.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../models/user_model.dart';
+import '../../../viewmodels/user_provider.dart';
 import '../../../viewmodels/usersharedpreference_provider.dart';
 import 'myhabitsinfo_screen.dart';
 
@@ -16,12 +18,12 @@ class SettingsIndex extends StatefulWidget {
 
 class _SettingsIndexState extends State<SettingsIndex> {
   var _email = "Email: ";
-  var _nama = "Benny Septiawan Salim";
   //pembuatan variabel provider untuk mengambil data dari sharedpreferences
   late SharedPreferences sharedPreferences =
       Provider.of<UserSharedPreferenceProvider>(context, listen: false).prefs;
   @override
   void initState() {
+    Provider.of<UserProvider>(context, listen: false).getUsername();
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user != null) {
         setState(() {
@@ -29,13 +31,12 @@ class _SettingsIndexState extends State<SettingsIndex> {
         });
       }
     });
-    Provider.of<UserSharedPreferenceProvider>(context, listen: false)
-        .getSharedPreferenceInstance();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    String username = Provider.of<UserProvider>(context).name;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -66,7 +67,7 @@ class _SettingsIndexState extends State<SettingsIndex> {
                     color: Colors.black,
                   ),
                   Text(
-                    _nama,
+                    username.toString(),
                     style: GoogleFonts.quicksand(
                         color: const Color.fromRGBO(53, 84, 56, 1),
                         fontWeight: FontWeight.bold,

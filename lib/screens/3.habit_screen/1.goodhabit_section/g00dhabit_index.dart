@@ -30,7 +30,7 @@ class _GoodHabitIndexState extends State<GoodHabitIndex> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            "Add Habit",
+            "Good Habit",
             style: GoogleFonts.quicksand(
                 color: const Color.fromRGBO(53, 84, 56, 1),
                 fontWeight: FontWeight.bold),

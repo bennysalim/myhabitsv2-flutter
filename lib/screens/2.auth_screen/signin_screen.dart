@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myhabitsv2/screens/3.habit_screen/bottom_navigation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -16,6 +17,20 @@ class _SignInScreenState extends State<SignInScreen> {
   final _ctrlEmail = TextEditingController();
   final _ctrlPassword = TextEditingController();
   String _email = "", _password = "";
+  //pembuatan variabel provider untuk mengambil data dari sharedpreferences
+  late SharedPreferences sharedPreferences;
+
+  //void initialize sharedPreferences instance
+  void initialize() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+  }
+
+  @override
+  void initState() {
+    initialize();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -119,6 +134,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               .instance
                               .signInWithEmailAndPassword(
                                   email: _email, password: _password);
+                          sharedPreferences.setBool("isNeedLogin", false);
                           Navigator.of(context)
                               .pushNamed(MyHabitsBottomNavigation.routeName);
                         } on FirebaseAuthException catch (e) {

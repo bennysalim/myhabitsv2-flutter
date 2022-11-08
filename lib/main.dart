@@ -9,6 +9,7 @@ import 'package:myhabitsv2/screens/1.intro_screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:myhabitsv2/viewmodels/badhabit_provider.dart';
 import 'package:myhabitsv2/viewmodels/goodhabit_provider.dart';
+import 'package:myhabitsv2/viewmodels/user_provider.dart';
 import 'package:myhabitsv2/viewmodels/usersharedpreference_provider.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
@@ -18,6 +19,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(const MyApp());
 }
 
@@ -29,7 +31,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => UserSharedPreferenceProvider()),
         ChangeNotifierProvider(create: (_) => GoodHabitProvider()),
-        ChangeNotifierProvider(create: (_) => BadHabitProvider())
+        ChangeNotifierProvider(create: (_) => BadHabitProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider())
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

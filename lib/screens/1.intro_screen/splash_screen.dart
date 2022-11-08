@@ -16,17 +16,44 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  // //pembuatan variabel provider untuk mengambil data dari sharedpreferences
-  // late SharedPreferences sharedPreferences =
-  //     Provider.of<UserSharedPreferenceProvider>(context, listen: false).prefs;
-  // late bool? isNeedLogin;
+  late SharedPreferences sharedPreferences;
+  late bool isNeedLogin;
+
+  void checkLogin() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    isNeedLogin = sharedPreferences.getBool("isNeedLogin") ?? true;
+    print("isNeedLogin: ${isNeedLogin}");
+    if (isNeedLogin == false) {
+      Timer(
+        const Duration(seconds: 2),
+        () => Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MyHabitsBottomNavigation(),
+          ),
+        ),
+      );
+    } else {
+      Timer(
+        const Duration(seconds: 2),
+        () => Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const OnboardingScreen(),
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   void initState() {
-    //MENGGUNAKAN SHAREDPREFERENCES
     // Provider.of<UserSharedPreferenceProvider>(context, listen: false)
-    // .getSharedPreferenceInstance();
-    // isNeedLogin = sharedPreferences.getBool("isNeedLogin");
+    //     .checkLogin();
+    // setState(() {
+    //   isNeedLogin = Provider.of<UserSharedPreferenceProvider>(context).newUser;
+    // });
+    checkLogin();
     // print("isNeedLogin: ${isNeedLogin.toString()}");
     // if (isNeedLogin == true) {
     //   Timer(
@@ -51,15 +78,15 @@ class _SplashScreenState extends State<SplashScreen> {
     // }
 
     //TANPA MENGGUNAKAN SHAREDPREFERENCES
-    Timer(
-      const Duration(seconds: 2),
-      () => Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const OnboardingScreen(),
-        ),
-      ),
-    );
+    // Timer(
+    //   const Duration(seconds: 2),
+    //   () => Navigator.pushReplacement(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => const OnboardingScreen(),
+    //     ),
+    //   ),
+    // );
     super.initState();
   }
 

@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:myhabitsv2/models/user_model.dart';
 
-class MyHabitsAPI {
+class UserAPI {
   late Dio _dio;
   late String _userUID;
   void getUserID() {
@@ -15,8 +15,9 @@ class MyHabitsAPI {
     );
   }
 
-  MyHabitsAPI() {
+  UserAPI() {
     _dio = Dio();
+    getUserID();
   }
 
   //baseURL
@@ -38,8 +39,17 @@ class MyHabitsAPI {
   }
 
   //1. post user data
-  Future<Map> getUsernameFromAPI() async {
+  Future<String> getUsernameFromAPIFromUID() async {
     final response = await _dio.get("$_baseURL/users.json");
-    return response.data;
+    String userModel = "";
+    if (response.data != null) {
+      response.data.forEach((key, value) {
+        if (value["userId"] == _userUID) {
+          userModel = value["nama"];
+        }
+      });
+      return userModel;
+    }
+    return "";
   }
 }

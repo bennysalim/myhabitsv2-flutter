@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:myhabitsv2/models/goodhabit_model.dart';
 import 'package:myhabitsv2/services/goodhabit_api.dart';
 
