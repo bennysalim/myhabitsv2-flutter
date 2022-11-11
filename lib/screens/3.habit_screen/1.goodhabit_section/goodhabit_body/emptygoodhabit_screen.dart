@@ -12,7 +12,10 @@ class EmptyGoodHabitScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset("lib/images/onboarding_image_3.png"),
+            Image.asset(
+              "lib/images/onboarding_image_3.png",
+              width: 250,
+            ),
             const SizedBox(
               height: 20,
             ),
@@ -31,6 +34,18 @@ class EmptyGoodHabitScreen extends StatelessWidget {
                 fontSize: 16,
                 color: const Color.fromRGBO(53, 84, 56, 1),
               ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              "(Silahkan cek di halaman settings untuk melihat semua habit)",
+              style: GoogleFonts.quicksand(
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+                color: const Color.fromRGBO(53, 84, 56, 1),
+              ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),

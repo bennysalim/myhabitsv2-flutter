@@ -2,9 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:myhabitsv2/models/badhabit_model.dart';
 import 'package:myhabitsv2/services/badhabit_api.dart';
 
+enum BadHabitState { none, loading, error }
+
 class BadHabitProvider extends ChangeNotifier {
   late BadHabitAPI _service;
   List<BadHabitModel> _badHabit = [];
+  BadHabitState _state = BadHabitState.none;
 
   BadHabitProvider() {
     _service = BadHabitAPI();
@@ -16,6 +19,13 @@ class BadHabitProvider extends ChangeNotifier {
     return [..._badHabit];
   }
 
+  BadHabitState get state => _state;
+
+  changeState(BadHabitState s) {
+    _state = s;
+    notifyListeners();
+  }
+
   Future<void> getAllBadHabitData() async {
     final result = await _service.getAllBadHabitFromAPI();
     _badHabit = result;
@@ -23,10 +33,16 @@ class BadHabitProvider extends ChangeNotifier {
   }
 
   Future<void> add(BadHabitModel badHabitModel) async {
-    final result = await _service.postBadHabitToAPI(badHabitModel);
-    if (result.id != null) {
-      _badHabit.add(result);
-      notifyListeners();
+    changeState(BadHabitState.loading);
+    try {
+      final result = await _service.postBadHabitToAPI(badHabitModel);
+      if (result.id != null) {
+        _badHabit.add(result);
+        notifyListeners();
+      }
+      changeState(BadHabitState.none);
+    } catch (e) {
+      changeState(BadHabitState.error);
     }
   }
 

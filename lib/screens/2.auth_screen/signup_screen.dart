@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myhabitsv2/models/user_model.dart';
+import 'package:myhabitsv2/viewmodels/user_provider.dart';
 import 'package:myhabitsv2/viewmodels/usersharedpreference_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -60,6 +62,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
       "nama": user["nama"],
     });
     print("response: ${response.data}");
+  }
+
+  Future<void> _onSubmit() async {
+    _formKey.currentState!.save();
+    final newUser = UserModel(nama: _username["nama"], userID: _userUID);
+    await Provider.of<UserProvider>(context, listen: false)
+        .postUsername(newUser);
   }
 
   //fungsi dipose untuk mencegah kebocoran memori
@@ -208,7 +217,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               .createUserWithEmailAndPassword(
                                   email: _email, password: _password);
                           //pemanggilan fungsi mengirimkan data username ke API
-                          postUsernameToAPI(_username);
+                          // postUsernameToAPI(_username);
+                          _onSubmit();
                           //pengaturan sharedpreference untuk mengubah isneedlogin true menjadi false
                           sharedPreferences.setBool("isNeedLogin", false);
                           //proses navigator

@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:myhabitsv2/models/goodhabit_model.dart';
 import 'package:myhabitsv2/services/goodhabit_api.dart';
 
+enum GoodHabitState { none, loading, error }
+
 class GoodHabitProvider with ChangeNotifier {
   late GoodHabitAPI _service;
   List<GoodHabitModel> _goodHabit = [];
+  GoodHabitState _state = GoodHabitState.none;
 
   GoodHabitProvider() {
     _service = GoodHabitAPI();
@@ -13,6 +16,13 @@ class GoodHabitProvider with ChangeNotifier {
 
   List<GoodHabitModel> get goodHabit {
     return [..._goodHabit];
+  }
+
+  GoodHabitState get state => _state;
+
+  changeState(GoodHabitState s) {
+    _state = s;
+    notifyListeners();
   }
 
   Future<void> getAllGoodHabitData() async {
@@ -28,10 +38,16 @@ class GoodHabitProvider with ChangeNotifier {
   }
 
   Future<void> add(GoodHabitModel goodHabitModel) async {
-    final result = await _service.postGoodHabitToAPI(goodHabitModel);
-    if (result.id != null) {
-      _goodHabit.add(result);
-      notifyListeners();
+    changeState(GoodHabitState.loading);
+    try {
+      final result = await _service.postGoodHabitToAPI(goodHabitModel);
+      if (result.id != null) {
+        _goodHabit.add(result);
+        notifyListeners();
+      }
+      changeState(GoodHabitState.none);
+    } catch (e) {
+      changeState(GoodHabitState.error);
     }
   }
 

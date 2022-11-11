@@ -92,6 +92,9 @@ class _EntryGoodHabitScreenState extends State<EntryGoodHabitScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isLoading =
+        Provider.of<GoodHabitProvider>(context).state == GoodHabitState.loading;
+
     updateGoodHabit =
         ModalRoute.of(context)!.settings.arguments as GoodHabitModel?;
     if (updateGoodHabit != null) {
@@ -694,15 +697,19 @@ class _EntryGoodHabitScreenState extends State<EntryGoodHabitScreen> {
                             backgroundColor:
                                 const Color.fromRGBO(53, 84, 56, 1),
                           ),
-                          child: Text(
-                            "Tambah Habit",
-                            style: GoogleFonts.quicksand(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              letterSpacing: -0.4,
-                              color: Colors.white,
-                            ),
-                          ),
+                          child: isLoading
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Text(
+                                  "Tambah Habit",
+                                  style: GoogleFonts.quicksand(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    letterSpacing: -0.4,
+                                    color: Colors.white,
+                                  ),
+                                ),
                         ),
                       ),
                     ],

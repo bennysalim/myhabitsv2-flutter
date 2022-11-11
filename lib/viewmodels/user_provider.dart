@@ -25,4 +25,10 @@ class UserProvider with ChangeNotifier {
     _name = result;
     notifyListeners();
   }
+
+  Future<void> postUsername(UserModel userModel) async {
+    final result = await _service.postUsernameToAPI(userModel);
+    _user.add(result);
+    notifyListeners();
+  }
 }

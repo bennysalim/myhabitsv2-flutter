@@ -16,12 +16,12 @@ class BadHabitIndex extends StatefulWidget {
 
 class _BadHabitIndexState extends State<BadHabitIndex> {
   @override
-  void didChangeDependencies() {
+  void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<BadHabitProvider>(context, listen: false)
           .getAllBadHabitData();
     });
-    super.didChangeDependencies();
+    super.initState();
   }
 
   @override

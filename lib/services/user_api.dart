@@ -25,20 +25,16 @@ class UserAPI {
       "https://myhabits2-flutter-default-rtdb.asia-southeast1.firebasedatabase.app";
 
   //PART 1 : USER MANAGEMENT
-
   //1. post user data
-
-  Future<Map> postUsernameToAPI(Map user) async {
-    getUserID();
-    final response = await _dio.post("$_baseURL/users.json", data: {
-      "userID": _userUID,
-      "nama": user["nama"],
-    });
-    print("response: ${response.data["nama"]}");
-    return response.data;
+  Future<UserModel> postUsernameToAPI(UserModel userModel) async {
+    final response = await _dio.post(
+      "$_baseURL/users.json",
+      data: userModel.toJson(),
+    );
+    return userModel;
   }
 
-  //1. post user data
+  //2. get user data
   Future<String> getUsernameFromAPIFromUID() async {
     final response = await _dio.get("$_baseURL/users.json");
     String userModel = "";
